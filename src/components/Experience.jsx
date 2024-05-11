@@ -39,7 +39,7 @@ const movement = () => {
     cube.current.applyImpulse({x: -0.1, y:0, z: 0})
   }
 }
-const speed = useRef(5)
+const speed = useRef(1)
 useFrame((_state, delta)=>{
   movement()
   if(jumpPressed){
