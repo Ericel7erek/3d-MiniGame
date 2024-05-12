@@ -80,14 +80,14 @@ useFrame((_state, delta)=>{
         }
       }}
       >
-      <Box position={[-2,3,0]} args={[1,1,1]} onPointerEnter={()=>sethover(true)} onPointerLeave={()=>sethover(false)} onClick={()=>setStart(true)}>
+      <Box position={[-2,3,0]} args={[1,1,1]} onPointerEnter={()=>sethover(true)} onPointerLeave={()=>sethover(false)} onClick={()=>jump()}>
         <meshBasicMaterial color={hover? "Pink": "Gold"} />
         </Box>
       </RigidBody>
 
       <RigidBody type="kinematicPosition" position={[0,0.75,0]} ref={kicker}>
         <group>
-      <Box position={[2.5,0,0]} args={[5,0.5,0.5]}>
+      <Box position={[2.5,0,0]} args={[5,0.5,0.5]} onClick={()=>setStart(true)}>
         <meshBasicMaterial color={"#402F1D"} />
         </Box>
         </group>
