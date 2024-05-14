@@ -6,7 +6,6 @@ import * as THREE from "three";
 import { Controls } from "../App";
 
 export const Experience = () => {
-  const [hover, setHover] = useState(false);
   const cube = useRef();
   const box = useRef();
   const kicker = useRef();
@@ -101,8 +100,8 @@ export const Experience = () => {
           }
         }}
       >
-        <Box ref={box} position={[-2, 3, 0]} args={[1, 1, 1]} onPointerEnter={() => setHover(true)} onPointerLeave={() => setHover(false)} onClick={() => jump()}>
-          <meshBasicMaterial color={hover ? "Pink" : "Gold"} />
+        <Box ref={box} position={[-2, 3, 0]} args={[1, 1, 1]} onClick={() => jump()}>
+          <meshBasicMaterial color={"Gold"} />
         </Box>
       </RigidBody>
 
