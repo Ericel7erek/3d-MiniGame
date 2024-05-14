@@ -26,7 +26,7 @@ function App() {
     <Canvas shadows camera={{ position: [20, 20, 20], fov: 30 }}>
       <color attach="background" args={["#ececec"]} />
       <Suspense>
-      <Physics debug>
+      <Physics>
       <Experience />
       </Physics>
       </Suspense>
