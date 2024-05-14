@@ -53,7 +53,7 @@ export const Experience = () => {
   useEffect(() => {
     const savedTime = parseFloat(localStorage.highScore);
     if (!isNaN(savedTime)) {
-      setHighScore(savedTime.toFixed(2));
+      setHighScore(savedTime.toFixed(1));
     }
   }, []);
   useFrame((_state, delta) => {
@@ -100,7 +100,7 @@ export const Experience = () => {
           }
         }}
       >
-        <Box ref={box} position={[-2, 3, 0]} args={[1, 1, 1]} onClick={() => jump()}>
+        <Box ref={box} position={[-2, 3, 0]} args={[1, 1, 1]} onPointerUp={()=> jump()} onClick={() => jump()}>
           <meshBasicMaterial color={"Gold"} />
         </Box>
       </RigidBody>
