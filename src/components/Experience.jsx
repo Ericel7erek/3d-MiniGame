@@ -1,7 +1,7 @@
 import { Box, OrbitControls, Text, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { RigidBody, quat } from "@react-three/rapier";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, Suspense } from "react";
 import * as THREE from "three";
 import { Controls } from "../App";
 
@@ -11,7 +11,6 @@ export const Experience = () => {
   const kicker = useRef();
   const [start, setStart] = useState(false);
   const [timer, setTimer] = useState(0);
-  const [color, setColor] = useState(false);
   const isOnFloor = useRef();
   const [highScore, setHighScore] = useState(null);
 
@@ -56,6 +55,7 @@ export const Experience = () => {
       setHighScore(savedTime.toFixed(1));
     }
   }, []);
+  console.log(movement());
   useFrame((_state, delta) => {
     movement();
     if (jumpPressed) {
@@ -81,22 +81,22 @@ export const Experience = () => {
 
   return (
     <>
-      <Text position={[0, 2.5, 0]} onClick={() => setStart(true)}>{start ? `Time: ${timer.toFixed(2)}s` : "Click to start"}</Text>
+      <Text position={[0, 4, 0]} onClick={() => setStart(true)}>{start ? `Time: ${timer.toFixed(2)}s` : "Click to start"}</Text>
       {highScore && <Text position={[0, 5, 0]} color={"red"}>{`High Score: ${highScore}s`}</Text>}
+      
       <OrbitControls />
       <ambientLight intensity={0.5} />
+      
 
       <RigidBody ref={cube}
         onCollisionEnter={({ other }) => {
-          if (other.rigidBodyObject.name === "Floor") {
+          if (other?.rigidBodyObject?.name === "Floor") {
             isOnFloor.current = true;
-            setColor(!color);
           }
         }}
         onCollisionExit={({ other }) => {
-          if (other.rigidBodyObject.name === "Floor") {
+          if (other?.rigidBodyObject?.name === "Floor") {
             isOnFloor.current = false;
-            setColor(!color);
           }
         }}
       >
@@ -115,7 +115,7 @@ export const Experience = () => {
 
       <RigidBody type="fixed" name="Floor">
         <Box args={[10, 1, 10]}>
-          <meshBasicMaterial color={color ? "black" : "green"} />
+          <meshBasicMaterial color={"green"} />
         </Box>
       </RigidBody>
     </>
