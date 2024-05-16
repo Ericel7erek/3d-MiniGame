@@ -10,6 +10,7 @@ export const Experience = () => {
   const box = useRef();
   const kicker = useRef();
   const [start, setStart] = useState(false);
+  const [lost, setLost] = useState(false);
   const [timer, setTimer] = useState(0);
   const isOnFloor = useRef();
   const [highScore, setHighScore] = useState(null);
@@ -28,6 +29,15 @@ export const Experience = () => {
     leftPressed: state[Controls.left],
     rightPressed: state[Controls.right]
   }));
+    const handleRestart = () => {
+    setStart(false);
+    setLost(false)
+    setTimer(0);
+    speed.current = 1;
+    cube.current.setTranslation({ x: -2, y: 5, z: 0 });
+    cube.current.setLinvel({ x: 0, y: 0, z: 0 });
+    cube.current.setAngvel({ x: 0, y: 0, z: 0 });
+  };
 
   const movement = () => {
     if (!isOnFloor.current) {
@@ -55,14 +65,14 @@ export const Experience = () => {
       setHighScore(savedTime.toFixed(1));
     }
   }, []);
-  console.log(movement());
   useFrame((_state, delta) => {
     movement();
     if (jumpPressed) {
       jump();
     }
-    if (cube.current.translation().y < -2.5 && start) {
+    if (cube?.current?.translation().y < -2.5 && start) {
       setStart(false);
+      setLost(true);
       const savedTime = parseFloat(localStorage.highScore);
       if (isNaN(savedTime) || timer > savedTime) {
         localStorage.setItem("highScore", timer.toFixed(1));
@@ -78,12 +88,12 @@ export const Experience = () => {
       speed.current += 0.005;
     }
   });
-
+  
   return (
     <>
-      <Text position={[0, 4, 0]} onClick={() => setStart(true)}>{start ? `Time: ${timer.toFixed(2)}s` : "Click to start"}</Text>
-      {highScore && <Text position={[0, 5, 0]} color={"red"}>{`High Score: ${highScore}s`}</Text>}
-      
+    {!lost&&<Text position={[0, 4, 0]} onClick={() => setStart(true)}>{start ? `Time: ${timer.toFixed(2)}s` : "Click to start"}</Text>}
+    {highScore && <Text position={[0, 5, 0]} color={"red"}>{`High Score: ${highScore}s`}</Text>}
+    {lost &&<Text position={[0, 4, 0]} onClick={() =>handleRestart()}>Restart</Text>}
       <OrbitControls />
       <ambientLight intensity={0.5} />
       
@@ -99,7 +109,7 @@ export const Experience = () => {
             isOnFloor.current = false;
           }
         }}
-      >
+        >
         <Box ref={box} position={[-2, 3, 0]} args={[1, 1, 1]} onPointerUp={()=> jump()} onClick={() => jump()}>
           <meshBasicMaterial color={"Gold"} />
         </Box>
@@ -113,7 +123,7 @@ export const Experience = () => {
         </group>
       </RigidBody>
 
-      <RigidBody type="fixed" name="Floor">
+      <RigidBody type="fixed" name="Floor" friction={0}>
         <Box args={[10, 1, 10]}>
           <meshBasicMaterial color={"green"} />
         </Box>
